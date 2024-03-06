@@ -7,7 +7,11 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        logo: 'url("/public/logo.png")',
+      },
+    },
   },
   plugins: [],
 }
