@@ -9,8 +9,18 @@ module.exports = {
   ],
   theme: {
     extend: {
+      width: {
+        37: '148px',
+      },
+      height: {
+        37: '148px',
+      },
       maxWidth: {
+        37: '148px',
         'main-content': '864px',
+      },
+      maxHeight: {
+        37: '148px',
       },
       backgroundImage: {
         logo: 'url("/logo.png")',
