@@ -15,7 +15,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-br" className={nunito.className}>
+    <html
+      lang="pt-br"
+      className={nunito.className}
+      suppressHydrationWarning={true}
+    >
       <body>
         <header className="flex min-h-[296px] w-full before:w-full before:bg-logo before:bg-cover before:bg-center before:bg-no-repeat" />
         {children}
