@@ -23,7 +23,7 @@ module.exports = {
         37: '148px',
       },
       backgroundImage: {
-        logo: 'url("/logo.png")',
+        logo: 'url("/logo.webp")',
       },
       borderColor: {
         'base-border': 'var(--base-border)',

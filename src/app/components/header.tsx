@@ -36,17 +36,32 @@ export function Header() {
   })
   const [loading, setLoading] = useState<boolean>(true)
 
+  async function fetchUserSummary() {
+    const url = 'https://api.github.com/users/kaiquecamposdev'
+    const response = await axios.get(url)
+    const data = response.data as ProfileType
+
+    localStorage.setItem('github-blog:profile', JSON.stringify(data))
+
+    setProfile(data)
+  }
+
   useEffect(() => {
-    async function fetchUserSummary() {
-      const url = 'https://api.github.com/users/kaiquecamposdev'
-      const response = await axios.get(url)
-      const { avatar_url, login, name, html_url, bio, company, followers } =
-        response.data as ProfileType
+    fetchUserSummary()
+      .then(() => {
+        const initialStateInJSON = localStorage.getItem('github-blog:profile')
 
-      setProfile({ avatar_url, login, name, html_url, bio, company, followers })
-    }
+        if (initialStateInJSON === null) {
+          return
+        }
 
-    fetchUserSummary().then(() => setLoading(false))
+        const initialState = JSON.parse(initialStateInJSON)
+
+        setProfile(initialState)
+
+        setLoading(false)
+      })
+      .catch((err) => console.log(err))
   }, [])
 
   return (
@@ -54,7 +69,7 @@ export function Header() {
       key={profile.login}
       className="mt-[-87px] flex items-center gap-8 rounded-lg bg-base-profile p-10 shadow-xl"
     >
-      <section className="max-w-37 w-full rounded-lg">
+      <section className="w-full max-w-37 rounded-lg">
         {loading ? (
           <Skeleton
             borderRadius={8}
