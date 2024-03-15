@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
+import { IssuesPostsProvider } from './context/issues-posts-provider'
 import './globals.css'
 
 const nunito = Nunito({ subsets: ['latin'], display: 'swap' })
@@ -20,10 +21,12 @@ export default function RootLayout({
       className={nunito.className}
       suppressHydrationWarning={true}
     >
-      <body>
-        <header className="flex min-h-[296px] w-full before:w-full before:bg-logo before:bg-cover before:bg-center before:bg-no-repeat" />
-        {children}
-      </body>
+      <IssuesPostsProvider>
+        <body>
+          <header className="flex min-h-[296px] w-full before:w-full before:bg-logo before:bg-cover before:bg-center before:bg-no-repeat" />
+          {children}
+        </body>
+      </IssuesPostsProvider>
     </html>
   )
 }
