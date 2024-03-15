@@ -43,22 +43,13 @@ export function Header() {
 
     localStorage.setItem('github-blog:profile', JSON.stringify(data))
 
-    setProfile(data)
+    return data
   }
 
   useEffect(() => {
     fetchUserSummary()
-      .then(() => {
-        const initialStateInJSON = localStorage.getItem('github-blog:profile')
-
-        if (initialStateInJSON === null) {
-          return
-        }
-
-        const initialState = JSON.parse(initialStateInJSON)
-
-        setProfile(initialState)
-
+      .then((data) => {
+        setProfile(data)
         setLoading(false)
       })
       .catch((err) => console.log(err))
