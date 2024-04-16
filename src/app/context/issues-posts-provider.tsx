@@ -3,13 +3,19 @@
 import axios from 'axios'
 import { createContext, useEffect, useState } from 'react'
 
+const GITHUB_USERNAME = 'kaiquecamposdev'
+const GITHUB_REPO = 'github-blog'
+
 interface IssuePost {
   id: number
+  repository_url: string
   title: string
   body: string
-  login: string
   comments: number
   created_at: string
+  user: {
+    login: string
+  }
 }
 
 interface IssuesPostsContextProps {
@@ -36,7 +42,7 @@ export function IssuesPostsProvider({ children }: IssuesPostsContextType) {
   })
 
   async function fetchIssuesPosts() {
-    const url = `https://api.github.com/repos/kaiquecamposdev/github-blog/issues`
+    const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/issues`
     const response = await axios.get(url)
     const data = response.data as IssuePost[]
 
@@ -46,6 +52,9 @@ export function IssuesPostsProvider({ children }: IssuesPostsContextType) {
   }
 
   useEffect(() => {
+    if (issuesPosts) {
+      return
+    }
     fetchIssuesPosts().then((data) => {
       setIssuesPosts(data)
     })
