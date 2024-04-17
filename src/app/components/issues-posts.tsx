@@ -7,13 +7,13 @@ import { useContext } from 'react'
 import { IssuesPostsContext } from '../context/issues-posts-provider'
 
 export function IssuesPosts() {
-  const { issuesPosts } = useContext(IssuesPostsContext)
+  const {
+    issuesPosts: { items },
+  } = useContext(IssuesPostsContext)
 
   return (
     <ul className="grid grid-cols-2 gap-8">
-      {issuesPosts.map(({ id, title, body, created_at }) => {
-        const createdAtDate = new Date(created_at)
-
+      {items.map(({ id, title, body, created_at }) => {
         return (
           <li
             key={id}
@@ -25,7 +25,7 @@ export function IssuesPosts() {
                   {title}
                 </h1>
                 <time className="text-nowrap text-sm text-base-span">
-                  {formatDistance(createdAtDate, new Date(), {
+                  {formatDistance(created_at, new Date(), {
                     addSuffix: true,
                     locale: ptBR,
                   })}

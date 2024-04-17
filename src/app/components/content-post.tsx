@@ -11,24 +11,20 @@ interface QueryParamsPropsType extends Params {
 }
 
 export function ContentPost() {
-  const { issuesPosts } = useContext(IssuesPostsContext)
+  const {
+    issuesPosts: { items },
+  } = useContext(IssuesPostsContext)
   const params = useParams<QueryParamsPropsType>()
 
-  const formattedIssuesPosts = issuesPosts.filter((item) => {
-    return item.id === Number(params[':id'])
+  const data = items.find((item) => {
+    return item.id === params[':id']
   })
-
-  console.log(formattedIssuesPosts)
 
   return (
     <>
-      {formattedIssuesPosts.map((data) => {
-        return (
-          <Markdown className="leading-[160%] text-base-text">
-            {data.body}
-          </Markdown>
-        )
-      })}
+      <Markdown className="leading-[160%] text-base-text">
+        {data?.body}
+      </Markdown>
     </>
   )
 }

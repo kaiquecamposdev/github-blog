@@ -28,25 +28,24 @@ interface ProfileType {
 
 export function Header() {
   const [profile, setProfile] = useState<ProfileType>(() => {
+    const emptyProfile = {
+      avatar_url: '',
+      login: '',
+      name: '',
+      html_url: '',
+      bio: '',
+      company: '',
+      followers: 0,
+    }
     const initialStateInJSON = localStorage.getItem('github-blog:profile')
 
     if (initialStateInJSON === null) {
-      return
+      return emptyProfile
     }
 
     const initialState = JSON.parse(initialStateInJSON)
 
-    return (
-      initialState || {
-        avatar_url: '',
-        login: '',
-        name: '',
-        html_url: '',
-        bio: '',
-        company: '',
-        followers: 0,
-      }
-    )
+    return initialState || emptyProfile
   })
   const [loading, setLoading] = useState<boolean>(true)
 

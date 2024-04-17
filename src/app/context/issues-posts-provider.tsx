@@ -7,19 +7,25 @@ const GITHUB_USERNAME = 'kaiquecamposdev'
 const GITHUB_REPO = 'github-blog'
 
 interface IssuePost {
-  id: number
-  repository_url: string
-  title: string
-  body: string
-  comments: number
-  created_at: string
-  user: {
-    login: string
-  }
+  total_count: number
+  items: [
+    {
+      id: number
+      repository_url: string
+      title: string
+      body: string
+      comments: number
+      created_at: string
+      user: {
+        login: string
+      }
+    },
+  ]
 }
 
 interface IssuesPostsContextProps {
-  issuesPosts: IssuePost[]
+  issuesPosts: IssuePost
+  handleSearch: (query: string) => void
 }
 
 interface IssuesPostsContextType {
@@ -29,33 +35,57 @@ interface IssuesPostsContextType {
 export const IssuesPostsContext = createContext({} as IssuesPostsContextProps)
 
 export function IssuesPostsProvider({ children }: IssuesPostsContextType) {
-  const [issuesPosts, setIssuesPosts] = useState<IssuePost[]>(() => {
-    const initialStateInJSON = localStorage.getItem('github-blog:posts')
+  const [search, setSearch] = useState('')
+  const [issuesPosts, setIssuesPosts] = useState<IssuePost>(() => {
+    const emptyPost = {
+      total_count: 0,
+      items: [
+        {
+          id: 0,
+          repository_url: '',
+          title: '',
+          body: '',
+          comments: 0,
+          created_at: '',
+          user: {
+            login: '',
+          },
+        },
+      ],
+    }
+
+    const initialStateInJSON = localStorage?.getItem('github-blog:posts')
 
     if (initialStateInJSON === null) {
-      return
+      return emptyPost
     }
 
     const initialState = JSON.parse(initialStateInJSON)
 
-    return initialState
+    return initialState || emptyPost
   })
+  function handleSearch(query: string) {
+    console.log(search)
 
-  async function fetchIssuesPosts() {
-    const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/issues`
-    const response = await axios.get(url)
-    const data = response.data as IssuePost[]
+    setSearch(query)
+  }
+  async function fetchIssuesPosts(query: string) {
+    const url = `https://api.github.com/search/issues`
+    const params = `%20repo:${GITHUB_USERNAME}/${GITHUB_REPO}`
+    const response = await axios.get(url, {
+      params: {
+        q: query + params,
+      },
+    })
+    const data = response.data as IssuePost
 
-    localStorage.setItem('github-blog:posts', JSON.stringify(data))
+    localStorage?.setItem('github-blog:posts', JSON.stringify(data))
 
     return data
   }
 
   useEffect(() => {
-    if (issuesPosts) {
-      return
-    }
-    fetchIssuesPosts().then((data) => {
+    fetchIssuesPosts(search).then((data) => {
       setIssuesPosts(data)
     })
   }, [])
@@ -64,6 +94,7 @@ export function IssuesPostsProvider({ children }: IssuesPostsContextType) {
     <IssuesPostsContext.Provider
       value={{
         issuesPosts,
+        handleSearch,
       }}
     >
       {children}
