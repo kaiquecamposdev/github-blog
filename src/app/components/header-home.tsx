@@ -95,7 +95,7 @@ export function Header() {
           />
         )}
       </section>
-      <section className="flex w-full flex-col">
+      <section className="flex w-full flex-col justify-center">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold text-base-title">
             {loading ? (

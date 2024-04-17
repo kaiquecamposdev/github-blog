@@ -8,6 +8,8 @@ import {
   faComment,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { formatDistance } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -35,6 +37,7 @@ export function Header() {
   })
 
   const filteredPost = formattedIssuesPosts[0]
+  const createdAtDate = new Date(filteredPost.created_at)
 
   return (
     <>
@@ -104,7 +107,12 @@ export function Header() {
                   className="opacity-50"
                 />
               ) : (
-                <p>{filteredPost.created_at}</p>
+                <time>
+                  {formatDistance(createdAtDate, new Date(), {
+                    addSuffix: true,
+                    locale: ptBR,
+                  })}
+                </time>
               )}
             </li>
             <li className="flex items-center gap-2 text-base-label">
