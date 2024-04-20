@@ -45,7 +45,7 @@ export function Header() {
 
     const initialState = JSON.parse(initialStateInJSON)
 
-    return initialState || emptyProfile
+    return initialState
   })
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -60,10 +60,6 @@ export function Header() {
   }
 
   useEffect(() => {
-    if (profile) {
-      setLoading(false)
-      return
-    }
     fetchUserSummary()
       .then((data) => {
         setProfile(data)

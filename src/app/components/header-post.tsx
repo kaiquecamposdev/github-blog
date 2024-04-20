@@ -5,7 +5,9 @@ import {
   faAngleLeft,
   faArrowUpRightFromSquare,
   faCalendarDay,
-  faComment,
+  faCodeFork,
+  faEye,
+  faStar,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { formatDistance } from 'date-fns'
@@ -15,7 +17,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { IssuesPostsContext } from '../context/issues-posts-provider'
+import { ReposPostsContext } from '../context/repos-posts-provider'
 
 interface QueryParamsPropsType extends Params {
   ':id': number
@@ -24,20 +26,17 @@ interface QueryParamsPropsType extends Params {
 export function Header() {
   const [loading, setLoading] = useState<boolean>(true)
   const params = useParams<QueryParamsPropsType>()
-  const { issuesPosts } = useContext(IssuesPostsContext)
+  const { reposPosts } = useContext(ReposPostsContext)
 
   useEffect(() => {
-    if (issuesPosts) {
+    if (reposPosts) {
       setLoading(false)
     }
   }, [])
 
-  const formattedIssuesPosts = issuesPosts.filter((item) => {
+  const formattedReposPosts = reposPosts.find((item) => {
     return item.id === Number(params[':id'])
   })
-
-  const filteredPost = formattedIssuesPosts[0]
-  const createdAtDate = new Date(filteredPost.created_at)
 
   return (
     <>
@@ -47,7 +46,7 @@ export function Header() {
             <FontAwesomeIcon icon={faAngleLeft} width={12} height={12} /> Voltar
           </Link>
           <Link
-            href={filteredPost.repository_url || '#'}
+            href={formattedReposPosts?.html_url || '#'}
             className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-base-blue"
           >
             {loading ? (
@@ -70,7 +69,7 @@ export function Header() {
           </Link>
         </div>
         <h1 className="w-full pt-5 text-2xl font-bold leading-[160%] text-base-text">
-          {filteredPost.title}
+          {formattedReposPosts?.name}
         </h1>
         <div className="flex w-full">
           <ul className="flex gap-6 text-base-subtitle">
@@ -89,7 +88,7 @@ export function Header() {
                   className="opacity-50"
                 />
               ) : (
-                <p>{filteredPost.user.login}</p>
+                <p>{formattedReposPosts?.user.login}</p>
               )}
             </li>
             <li className="flex items-center gap-2 text-base-label">
@@ -108,10 +107,14 @@ export function Header() {
                 />
               ) : (
                 <time>
-                  {formatDistance(createdAtDate, new Date(), {
-                    addSuffix: true,
-                    locale: ptBR,
-                  })}
+                  {formatDistance(
+                    formattedReposPosts?.created_at ?? new Date(),
+                    new Date(),
+                    {
+                      addSuffix: true,
+                      locale: ptBR,
+                    },
+                  )}
                 </time>
               )}
             </li>
@@ -120,7 +123,7 @@ export function Header() {
                 width={18}
                 height={18}
                 className="text-base-label"
-                icon={faComment}
+                icon={faStar}
               />
               {loading ? (
                 <Skeleton
@@ -129,7 +132,41 @@ export function Header() {
                   className="opacity-50"
                 />
               ) : (
-                <p>{filteredPost.comments + ' '} comentários</p>
+                <p>{formattedReposPosts?.stargazers_count + ' '} estrelas</p>
+              )}
+            </li>
+            <li className="flex items-center gap-2 text-base-label">
+              <FontAwesomeIcon
+                width={18}
+                height={18}
+                className="text-base-label"
+                icon={faCodeFork}
+              />
+              {loading ? (
+                <Skeleton
+                  width={120}
+                  baseColor="var(--base-text)"
+                  className="opacity-50"
+                />
+              ) : (
+                <p>{formattedReposPosts?.forks + ' '} forks</p>
+              )}
+            </li>
+            <li className="flex items-center gap-2 text-base-label">
+              <FontAwesomeIcon
+                width={18}
+                height={18}
+                className="text-base-label"
+                icon={faEye}
+              />
+              {loading ? (
+                <Skeleton
+                  width={120}
+                  baseColor="var(--base-text)"
+                  className="opacity-50"
+                />
+              ) : (
+                <p>{formattedReposPosts?.watchers + ' '} visto</p>
               )}
             </li>
           </ul>

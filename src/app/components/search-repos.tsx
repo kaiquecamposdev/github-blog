@@ -1,10 +1,10 @@
 'use client'
 
 import { useContext, useEffect, useState } from 'react'
-import { IssuesPostsContext } from '../context/issues-posts-provider'
+import { ReposPostsContext } from '../context/repos-posts-provider'
 
-export function SearchIssues() {
-  const { handleSearch } = useContext(IssuesPostsContext)
+export function SearchRepos() {
+  const { handleSearch } = useContext(ReposPostsContext)
   const [search, setSearch] = useState('')
 
   useEffect(() => {

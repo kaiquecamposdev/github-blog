@@ -4,26 +4,24 @@ import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import { useParams } from 'next/navigation'
 import { useContext } from 'react'
 import Markdown from 'react-markdown'
-import { IssuesPostsContext } from '../context/issues-posts-provider'
+import { ReposPostsContext } from '../context/repos-posts-provider'
 
 interface QueryParamsPropsType extends Params {
   ':id': number
 }
 
 export function ContentPost() {
-  const {
-    issuesPosts: { items },
-  } = useContext(IssuesPostsContext)
+  const { reposPosts } = useContext(ReposPostsContext)
   const params = useParams<QueryParamsPropsType>()
 
-  const data = items.find((item) => {
-    return item.id === params[':id']
+  const data = reposPosts.find((repo) => {
+    return repo.id === Number(params[':id'])
   })
 
   return (
     <>
       <Markdown className="leading-[160%] text-base-text">
-        {data?.body}
+        {data?.description || 'Não há conteúdo'}
       </Markdown>
     </>
   )

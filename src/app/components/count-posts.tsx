@@ -1,14 +1,14 @@
 'use client'
 
 import { useContext } from 'react'
-import { IssuesPostsContext } from '../context/issues-posts-provider'
+import { ReposPostsContext } from '../context/repos-posts-provider'
 
 export function CountPosts() {
-  const { issuesPosts } = useContext(IssuesPostsContext)
+  const { reposPosts } = useContext(ReposPostsContext)
 
   return (
     <span className="text-sm text-base-span">
-      {issuesPosts.length + ' '}
+      {reposPosts.length + ' '}
       Publicações
     </span>
   )

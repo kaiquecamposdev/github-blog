@@ -1,7 +1,7 @@
 import { CountPosts } from './components/count-posts'
 import { Header } from './components/header-home'
-import { IssuesPosts } from './components/issues-posts'
-import { SearchIssues } from './components/search-issues'
+import { ReposPosts } from './components/repos-posts'
+import { SearchRepos } from './components/search-repos'
 
 export default function Home() {
   return (
@@ -17,10 +17,10 @@ export default function Home() {
               <CountPosts />
             </div>
             <div>
-              <SearchIssues />
+              <SearchRepos />
             </div>
           </div>
-          {<IssuesPosts /> || (
+          {<ReposPosts /> || (
             <div className="flex flex-col items-center justify-center">
               <h1 className="text-xl font-bold text-base-title">
                 Não há publicações
