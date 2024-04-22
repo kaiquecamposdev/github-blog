@@ -9,9 +9,10 @@ export const GITHUB_USERNAME = 'kaiquecamposdev'
 interface RepoPost {
   id: number
   name: string
+  description: string
   html_url: string
   created_at: string
-  user: {
+  owner: {
     login: string
   }
   stargazers_count: number
@@ -39,9 +40,10 @@ export function ReposPostsProvider({ children }: ReposPostsContextType) {
         {
           id: 0,
           name: '',
+          description: '',
           html_url: '',
           created_at: '',
-          user: {
+          owner: {
             login: '',
           },
           stargazers_count: 0,

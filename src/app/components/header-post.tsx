@@ -88,7 +88,7 @@ export function Header() {
                   className="opacity-50"
                 />
               ) : (
-                <p>{formattedReposPosts?.user.login}</p>
+                <p>{formattedReposPosts?.owner.login}</p>
               )}
             </li>
             <li className="flex items-center gap-2 text-base-label">
@@ -108,7 +108,7 @@ export function Header() {
               ) : (
                 <time>
                   {formatDistance(
-                    formattedReposPosts?.created_at ?? new Date(),
+                    formattedReposPosts?.created_at || new Date(),
                     new Date(),
                     {
                       addSuffix: true,

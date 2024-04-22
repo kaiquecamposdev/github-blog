@@ -14,6 +14,7 @@ import {
 
 interface ReadmeRepo {
   content: string
+  encoding: string
 }
 
 export function ReposPosts() {
@@ -22,8 +23,8 @@ export function ReposPosts() {
     updateInitialState(
       [
         {
-          id: 0,
           content: '',
+          encoding: '',
         },
       ],
       'github-blog:repos-readme',
@@ -36,16 +37,14 @@ export function ReposPosts() {
   const repo_name = formattedReposPosts.map(({ name }) => name)
 
   async function fetchReadmeRepos(repo_name: string[]) {
-    const data: ReadmeRepo[] = []
+    const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${repo_name}/readme`
+    const response = await axios.get(url)
 
-    for (let i = 0; i < formattedReposPosts.length; i++) {
-      const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${repo_name}/readme`
-      const response = await axios.get(url)
+    const data = response.data as ReadmeRepo[]
 
-      const data = response.data as ReadmeRepo[]
+    console.log(response)
 
-      localStorage?.setItem('github-blog:repos-readme', JSON.stringify(data))
-    }
+    localStorage?.setItem('github-blog:repos-readme', JSON.stringify(data))
 
     return data
   }
@@ -68,15 +67,17 @@ export function ReposPosts() {
                   {name}
                 </h1>
                 <time className="text-nowrap text-sm text-base-span">
-                  {formatDistance(created_at, new Date(), {
+                  {formatDistance(created_at || new Date(), new Date(), {
                     addSuffix: true,
                     locale: ptBR,
                   })}
                 </time>
               </span>
               <Markdown className="overflow-hidden text-base-text">
-                {reposReadme.map(({ content }) => content.slice(0, 150)) +
-                  '...'}
+                {reposReadme.map(({ content, encoding }) => {
+                  const buff = Buffer.from(content, encoding)
+                  const text = buff.toString('utf-8')
+                })}
               </Markdown>
             </Link>
           </li>
