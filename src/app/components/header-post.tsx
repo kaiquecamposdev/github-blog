@@ -19,13 +19,13 @@ import { useContext, useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { ReposPostsContext } from '../context/repos-posts-provider'
 
-interface QueryParamsPropsType extends Params {
+interface IQueryParamsProps extends Params {
   ':id': number
 }
 
 export function Header() {
   const [loading, setLoading] = useState<boolean>(true)
-  const params = useParams<QueryParamsPropsType>()
+  const params = useParams<IQueryParamsProps>()
   const { reposPosts } = useContext(ReposPostsContext)
 
   useEffect(() => {

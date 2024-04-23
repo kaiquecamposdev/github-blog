@@ -1,5 +1,6 @@
 'use client'
 
+import { updateInitialState } from '@/utils/update-initial-state'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
   faArrowUpRightFromSquare,
@@ -10,13 +11,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { GITHUB_USERNAME } from '../context/repos-posts-provider'
 
-const GITHUB_USERNAME = 'kaiquecamposdev'
-
-interface ProfileType {
+interface IProfile {
   avatar_url: string
   login: string
   name: string
@@ -27,8 +27,8 @@ interface ProfileType {
 }
 
 export function Header() {
-  const [profile, setProfile] = useState<ProfileType>(() => {
-    const emptyProfile = {
+  const [profile, setProfile] = useState<IProfile>(
+    updateInitialState('github-blog:profile', {
       avatar_url: '',
       login: '',
       name: '',
@@ -36,37 +36,35 @@ export function Header() {
       bio: '',
       company: '',
       followers: 0,
-    }
-    const initialStateInJSON = localStorage.getItem('github-blog:profile')
-
-    if (initialStateInJSON === null) {
-      return emptyProfile
-    }
-
-    const initialState = JSON.parse(initialStateInJSON)
-
-    return initialState
-  })
+    }),
+  )
   const [loading, setLoading] = useState<boolean>(true)
 
-  async function fetchUserSummary() {
-    const url = `https://api.github.com/users/${GITHUB_USERNAME}`
-    const response = await axios.get(url)
-    const data = response.data as ProfileType
+  const fetchUserSummary = useMemo(
+    () => async () => {
+      const url = `https://api.github.com/users/${GITHUB_USERNAME}`
 
-    localStorage.setItem('github-blog:profile', JSON.stringify(data))
+      const response = await axios.get(url)
+      const data = response.data as IProfile
 
-    return data
-  }
+      localStorage.setItem('github-blog:profile', JSON.stringify(data))
+
+      return data
+    },
+    [GITHUB_USERNAME],
+  )
 
   useEffect(() => {
-    fetchUserSummary()
-      .then((data) => {
-        setProfile(data)
-        setLoading(false)
-      })
-      .catch((err) => console.log(err))
-  }, [])
+    if (!profile) {
+      fetchUserSummary()
+        .then((data) => {
+          setProfile(data)
+          setLoading(false)
+        })
+        .catch((err) => console.log(err))
+    }
+    setLoading(false)
+  }, [profile])
 
   return (
     <header className="mt-[-87px] flex gap-8 rounded-lg bg-base-profile p-8 shadow-xl">

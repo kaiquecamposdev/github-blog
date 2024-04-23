@@ -2,11 +2,12 @@
 
 import { updateInitialState } from '@/utils/update-initial-state'
 import axios from 'axios'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useMemo, useState } from 'react'
 
 export const GITHUB_USERNAME = 'kaiquecamposdev'
+const PER_PAGE = 10
 
-interface RepoPost {
+interface IRepoPost {
   id: number
   name: string
   description: string
@@ -18,60 +19,61 @@ interface RepoPost {
   stargazers_count: number
   forks: number
   watchers: number
+  content_readme: string
 }
 
-interface ReposPostsContextProps {
-  reposPosts: RepoPost[]
+interface IReposPostsContextProps {
+  reposPosts: IRepoPost[]
   handleSearch: (query: string) => void
   search: string
 }
 
-interface ReposPostsContextType {
+interface IReposPostsContext {
   children: React.ReactNode
 }
 
-export const ReposPostsContext = createContext({} as ReposPostsContextProps)
+export const ReposPostsContext = createContext({} as IReposPostsContextProps)
 
-export function ReposPostsProvider({ children }: ReposPostsContextType) {
+export function ReposPostsProvider({ children }: IReposPostsContext) {
   const [search, setSearch] = useState('')
-  const [reposPosts, setReposPosts] = useState<RepoPost[]>(
-    updateInitialState(
-      [
-        {
-          id: 0,
-          name: '',
-          description: '',
-          html_url: '',
-          created_at: '',
-          owner: {
-            login: '',
-          },
-          stargazers_count: 0,
-          forks: 0,
-          watchers: 0,
-        },
-      ],
-      'github-blog:posts',
-    ),
+  const [reposPosts, setReposPosts] = useState<IRepoPost[]>(
+    updateInitialState('github-blog:posts'),
   )
   function handleSearch(query: string) {
     setSearch(query)
   }
-  async function fetchReposPosts() {
-    const url = `https://api.github.com/users/${GITHUB_USERNAME}/repos`
-    const response = await axios.get(url)
+  const fetchReadmeReposPaginated = useMemo(
+    () =>
+      async (page = 1): Promise<IRepoPost[]> => {
+        const url = `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=${PER_PAGE}&page=${page}`
+        const response = await axios.get(url)
+        const repositories = response.data as IRepoPost[]
 
-    const data = response.data as RepoPost[]
+        const readmeRequests = repositories.map((repo) =>
+          axios.get(
+            `https://api.github.com/repos/${GITHUB_USERNAME}/${repo.name}/readme`,
+          ),
+        )
+        const readmeResponses = await Promise.all(readmeRequests)
+          .then((data) => data)
+          .catch(() => [])
 
-    localStorage?.setItem('github-blog:posts', JSON.stringify(data))
+        const updatedRepos = repositories.map((repo, index) => ({
+          ...repo,
+          readme: readmeResponses[index].data.content || '',
+        }))
 
-    return data
-  }
+        return [...updatedRepos, ...(await fetchReadmeReposPaginated(page + 1))]
+      },
+    [GITHUB_USERNAME, PER_PAGE],
+  )
 
   useEffect(() => {
-    fetchReposPosts().then((data) => {
-      setReposPosts(data)
-    })
+    if (!reposPosts) {
+      fetchReadmeReposPaginated().then((repos) => {
+        setReposPosts(repos)
+      })
+    }
   }, [])
 
   return (
