@@ -1,5 +1,5 @@
-import { ContentPost } from '@/app/components/content-post'
-import { Header } from '@/app/components/header-post'
+import { ContentPost } from '@/components/content-post'
+import { Header } from '@/components/header-post'
 
 export default function Post() {
   return (

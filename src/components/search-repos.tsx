@@ -1,7 +1,7 @@
 'use client'
 
+import { ReposPostsContext } from '@/app/context/repos-posts-provider'
 import { useContext, useEffect, useState } from 'react'
-import { ReposPostsContext } from '../context/repos-posts-provider'
 
 export function SearchRepos() {
   const { handleSearch } = useContext(ReposPostsContext)
@@ -20,7 +20,7 @@ export function SearchRepos() {
         placeholder="Buscar conteúdo"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full rounded-md border-[1px] border-base-border bg-base-input px-4 py-3 text-base text-white placeholder:text-base-label"
+        className="border-base-border bg-base-input placeholder:text-base-label w-full rounded-md border-[1px] px-4 py-3 text-base text-white"
       />
     </div>
   )

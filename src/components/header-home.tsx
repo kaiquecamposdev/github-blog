@@ -1,5 +1,6 @@
 'use client'
 
+import { GITHUB_USERNAME } from '@/app/context/repos-posts-provider'
 import { updateInitialState } from '@/utils/update-initial-state'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
@@ -14,7 +15,6 @@ import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { GITHUB_USERNAME } from '../context/repos-posts-provider'
 
 interface IProfile {
   avatar_url: string
@@ -28,15 +28,7 @@ interface IProfile {
 
 export function Header() {
   const [profile, setProfile] = useState<IProfile>(
-    updateInitialState('github-blog:profile', {
-      avatar_url: '',
-      login: '',
-      name: '',
-      html_url: '',
-      bio: '',
-      company: '',
-      followers: 0,
-    }),
+    updateInitialState('github-blog:profile'),
   )
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -47,7 +39,7 @@ export function Header() {
       const response = await axios.get(url)
       const data = response.data as IProfile
 
-      localStorage.setItem('github-blog:profile', JSON.stringify(data))
+      localStorage?.setItem('github-blog:profile', JSON.stringify(data))
 
       return data
     },
@@ -67,8 +59,8 @@ export function Header() {
   }, [profile])
 
   return (
-    <header className="mt-[-87px] flex gap-8 rounded-lg bg-base-profile p-8 shadow-xl">
-      <section className="w-full max-w-37 rounded-lg">
+    <header className="bg-base-profile mt-[-87px] flex gap-8 rounded-lg p-8 shadow-xl">
+      <section className="max-w-37 w-full rounded-lg">
         {loading ? (
           <Skeleton
             borderRadius={8}
@@ -80,7 +72,7 @@ export function Header() {
         ) : (
           <Image
             priority
-            src={profile.avatar_url}
+            src={profile?.avatar_url || ''}
             width={148}
             height={148}
             alt=""
@@ -90,7 +82,7 @@ export function Header() {
       </section>
       <section className="flex w-full flex-col justify-center">
         <div className="flex justify-between">
-          <h1 className="text-2xl font-bold text-base-title">
+          <h1 className="text-base-title text-2xl font-bold">
             {loading ? (
               <Skeleton
                 width={200}
@@ -99,12 +91,12 @@ export function Header() {
                 className="opacity-50"
               />
             ) : (
-              <>{profile.name}</>
+              <>{profile?.name}</>
             )}
           </h1>
           <Link
-            href={profile.html_url}
-            className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-base-blue"
+            href={profile?.html_url || '#'}
+            className="text-base-blue flex cursor-pointer items-center gap-2 text-xs font-bold uppercase"
           >
             {loading ? (
               <Skeleton
@@ -125,7 +117,7 @@ export function Header() {
             )}
           </Link>
         </div>
-        <p className="pt-1 leading-[160%] text-base-text">
+        <p className="text-base-text pt-1 leading-[160%]">
           {loading ? (
             <Skeleton
               width={500}
@@ -134,11 +126,11 @@ export function Header() {
               className="opacity-50"
             />
           ) : (
-            <>{profile.bio}</>
+            <>{profile?.bio || 'Sem conteúdo'}</>
           )}
         </p>
         <div className="flex flex-col pt-6">
-          <ul className="flex gap-6 text-base-subtitle">
+          <ul className="text-base-subtitle flex gap-6">
             <li className="flex items-center gap-2">
               <FontAwesomeIcon width={18} height={18} icon={faGithub} />
               {loading ? (
@@ -149,7 +141,7 @@ export function Header() {
                   className="opacity-50"
                 />
               ) : (
-                <p>{profile.login}</p>
+                <p>{profile?.login || 'Sem conteúdo'}</p>
               )}
             </li>
             <li className="flex items-center gap-2">
@@ -162,7 +154,7 @@ export function Header() {
                   className="opacity-50"
                 />
               ) : (
-                <p>{profile.company}</p>
+                <p>{profile?.company || 'Sem conteúdo'}</p>
               )}
             </li>
             <li className="flex items-center gap-2">
@@ -174,7 +166,7 @@ export function Header() {
                   className="opacity-50"
                 />
               ) : (
-                <p>{profile.followers + ' '} Seguidores</p>
+                <p>{profile?.followers + ' ' || 0 + ' '} Seguidores</p>
               )}
             </li>
           </ul>

@@ -1,7 +1,8 @@
-import { CountPosts } from './components/count-posts'
-import { Header } from './components/header-home'
-import { ReposPosts } from './components/repos-posts'
-import { SearchRepos } from './components/search-repos'
+import { CountPosts } from '@/components/count-posts'
+import { Header } from '@/components/header-home'
+import { PaginationContainer } from '@/components/pagination-home'
+import { ReposPosts } from '@/components/repos-posts'
+import { SearchRepos } from '@/components/search-repos'
 
 export default function Home() {
   return (
@@ -31,6 +32,7 @@ export default function Home() {
             </div>
           )}
         </section>
+        <PaginationContainer />
       </div>
     </section>
   )

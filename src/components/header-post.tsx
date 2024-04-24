@@ -1,5 +1,6 @@
 'use client'
 
+import { ReposPostsContext } from '@/app/context/repos-posts-provider'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
   faAngleLeft,
@@ -17,10 +18,9 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { ReposPostsContext } from '../context/repos-posts-provider'
 
 interface IQueryParamsProps extends Params {
-  ':id': number
+  id: number
 }
 
 export function Header() {
@@ -35,7 +35,7 @@ export function Header() {
   }, [])
 
   const formattedReposPosts = reposPosts.find((item) => {
-    return item.id === Number(params[':id'])
+    return item.id === Number(params.id)
   })
 
   return (

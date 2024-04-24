@@ -1,11 +1,11 @@
 'use client'
 
+import { ReposPostsContext } from '@/app/context/repos-posts-provider'
 import { formatDistance } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Link from 'next/link'
 import { useContext } from 'react'
 import Markdown from 'react-markdown'
-import { ReposPostsContext } from '../context/repos-posts-provider'
 
 export function ReposPosts() {
   const { reposPosts, search } = useContext(ReposPostsContext)
@@ -20,7 +20,7 @@ export function ReposPosts() {
 
   return (
     <ul className="grid grid-cols-2 gap-8">
-      {formattedReposPost.map(({ id, name, created_at, content_readme }) => {
+      {formattedReposPost.map(({ id, name, created_at, description }) => {
         return (
           <li
             key={id}
@@ -28,11 +28,11 @@ export function ReposPosts() {
           >
             <Link
               className="flex h-full flex-col gap-5"
-              href={`post/${id}` && '#'}
+              href={`post/${id}` || '#'}
             >
               <span className="flex gap-4">
                 <h1 className="w-full text-xl font-bold text-base-title">
-                  {name && 'Não há título'}
+                  {name || 'Não há título'}
                 </h1>
                 <time className="text-nowrap text-sm text-base-span">
                   {formatDistance(created_at, new Date(), {
@@ -42,7 +42,7 @@ export function ReposPosts() {
                 </time>
               </span>
               <Markdown className="overflow-hidden text-base-text">
-                {content_readme + '...' && 'Não há conteúdo'}
+                {description + '...' || 'Não há conteúdo'}
               </Markdown>
             </Link>
           </li>

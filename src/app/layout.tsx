@@ -1,6 +1,6 @@
+import { ReposPostsProvider } from '@/app/context/repos-posts-provider'
 import type { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
-import { ReposPostsProvider } from './context/repos-posts-provider'
 import './globals.css'
 
 const nunito = Nunito({ subsets: ['latin'], display: 'swap' })

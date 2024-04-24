@@ -5,7 +5,7 @@ import axios from 'axios'
 import { createContext, useEffect, useMemo, useState } from 'react'
 
 export const GITHUB_USERNAME = 'kaiquecamposdev'
-const PER_PAGE = 10
+const PER_PAGE = 6
 
 interface IRepoPost {
   id: number
@@ -19,13 +19,14 @@ interface IRepoPost {
   stargazers_count: number
   forks: number
   watchers: number
-  content_readme: string
 }
 
 interface IReposPostsContextProps {
   reposPosts: IRepoPost[]
   handleSearch: (query: string) => void
   search: string
+  handleDecrementPage: () => void
+  handleIncrementPage: () => void
 }
 
 interface IReposPostsContext {
@@ -42,39 +43,37 @@ export function ReposPostsProvider({ children }: IReposPostsContext) {
   function handleSearch(query: string) {
     setSearch(query)
   }
-  const fetchReadmeReposPaginated = useMemo(
+  const fetchReposPaginated = useMemo(
     () =>
       async (page = 1): Promise<IRepoPost[]> => {
-        const url = `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=${PER_PAGE}&page=${page}`
+        const url = `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=${PER_PAGE}&page=${0 + page}`
+
         const response = await axios.get(url)
         const repositories = response.data as IRepoPost[]
 
-        const readmeRequests = repositories.map((repo) =>
-          axios.get(
-            `https://api.github.com/repos/${GITHUB_USERNAME}/${repo.name}/readme`,
-          ),
-        )
-        const readmeResponses = await Promise.all(readmeRequests)
-          .then((data) => data)
-          .catch(() => [])
+        localStorage?.setItem('github-blog:posts', JSON.stringify(repositories))
 
-        const updatedRepos = repositories.map((repo, index) => ({
-          ...repo,
-          readme: readmeResponses[index].data.content || '',
-        }))
-
-        return [...updatedRepos, ...(await fetchReadmeReposPaginated(page + 1))]
+        return repositories
       },
     [GITHUB_USERNAME, PER_PAGE],
   )
+  function handleDecrementPage() {
+    fetchReposPaginated(-1)
+  }
+
+  function handleIncrementPage() {
+    fetchReposPaginated(1)
+  }
 
   useEffect(() => {
     if (!reposPosts) {
-      fetchReadmeReposPaginated().then((repos) => {
-        setReposPosts(repos)
-      })
+      fetchReposPaginated()
+        .then((repos) => {
+          setReposPosts(repos)
+        })
+        .catch((err) => console.log(err))
     }
-  }, [])
+  }, [reposPosts])
 
   return (
     <ReposPostsContext.Provider
@@ -82,6 +81,8 @@ export function ReposPostsProvider({ children }: IReposPostsContext) {
         reposPosts,
         handleSearch,
         search,
+        handleDecrementPage,
+        handleIncrementPage,
       }}
     >
       {children}
