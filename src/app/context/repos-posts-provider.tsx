@@ -5,7 +5,7 @@ import axios from 'axios'
 import { createContext, useEffect, useMemo, useState } from 'react'
 
 export const GITHUB_USERNAME = 'kaiquecamposdev'
-const PER_PAGE = 6
+export const PER_PAGE = 6
 
 interface IRepoPost {
   id: number
@@ -25,8 +25,8 @@ interface IReposPostsContextProps {
   reposPosts: IRepoPost[]
   handleSearch: (query: string) => void
   search: string
-  handleDecrementPage: () => void
-  handleIncrementPage: () => void
+  handlePreviousPage: () => IRepoPost[]
+  handleNextPage: () => IRepoPost[]
 }
 
 interface IReposPostsContext {
@@ -44,25 +44,23 @@ export function ReposPostsProvider({ children }: IReposPostsContext) {
     setSearch(query)
   }
   const fetchReposPaginated = useMemo(
-    () =>
-      async (page = 1): Promise<IRepoPost[]> => {
-        const url = `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=${PER_PAGE}&page=${0 + page}`
+    () => async (): Promise<IRepoPost[]> => {
+      const url = `https://api.github.com/users/${GITHUB_USERNAME}/repos`
 
-        const response = await axios.get(url)
-        const repositories = response.data as IRepoPost[]
+      const response = await axios.get(url)
+      const repositories = response.data as IRepoPost[]
 
-        localStorage?.setItem('github-blog:posts', JSON.stringify(repositories))
+      localStorage?.setItem('github-blog:posts', JSON.stringify(repositories))
 
-        return repositories
-      },
-    [GITHUB_USERNAME, PER_PAGE],
+      return repositories
+    },
+    [GITHUB_USERNAME],
   )
-  function handleDecrementPage() {
-    fetchReposPaginated(-1)
+  function handlePreviousPage() {
+    return reposPosts.slice(reposPosts.length, PER_PAGE)
   }
-
-  function handleIncrementPage() {
-    fetchReposPaginated(1)
+  function handleNextPage() {
+    return reposPosts.slice(PER_PAGE, reposPosts.length)
   }
 
   useEffect(() => {
@@ -81,8 +79,8 @@ export function ReposPostsProvider({ children }: IReposPostsContext) {
         reposPosts,
         handleSearch,
         search,
-        handleDecrementPage,
-        handleIncrementPage,
+        handlePreviousPage,
+        handleNextPage,
       }}
     >
       {children}

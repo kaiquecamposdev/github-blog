@@ -1,10 +1,9 @@
 'use client'
 
-import { ReposPostsContext } from '@/app/context/repos-posts-provider'
+import { PER_PAGE, ReposPostsContext } from '@/app/context/repos-posts-provider'
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -13,8 +12,12 @@ import {
 import { useContext } from 'react'
 
 export function PaginationContainer() {
-  const { handleDecrementPage, handleIncrementPage } =
+  const { handlePreviousPage, handleNextPage, reposPosts } =
     useContext(ReposPostsContext)
+
+  const countPages = reposPosts.length / PER_PAGE
+
+  console.log(countPages)
 
   return (
     <Pagination className="mt-8">
@@ -22,23 +25,18 @@ export function PaginationContainer() {
         <PaginationItem>
           <PaginationPrevious
             className="text-base-title"
-            href="#"
-            onClick={handleDecrementPage}
+            onClick={() => handlePreviousPage}
           />
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink className="text-base-title" href="#">
-            1
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis className="text-base-title" />
-        </PaginationItem>
+        {Array.from({ length: countPages }, (_, i) => (
+          <PaginationItem key={i}>
+            <PaginationLink className="text-base-title">{i + 1}</PaginationLink>
+          </PaginationItem>
+        ))}
         <PaginationItem>
           <PaginationNext
             className="text-base-title"
-            href="#"
-            onClick={handleIncrementPage}
+            onClick={() => handleNextPage}
           />
         </PaginationItem>
       </PaginationContent>
