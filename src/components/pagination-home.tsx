@@ -1,6 +1,6 @@
 'use client'
 
-import { PER_PAGE, ReposPostsContext } from '@/app/context/repos-posts-provider'
+import { ReposPostsContext } from '@/app/context/repos-posts-provider'
 import {
   Pagination,
   PaginationContent,
@@ -15,9 +15,13 @@ export function PaginationContainer() {
   const { handlePreviousPage, handleNextPage, reposPosts } =
     useContext(ReposPostsContext)
 
-  const countPages = reposPosts.length / PER_PAGE
+  const reposPaginated = new Set()
 
-  console.log(countPages)
+  for (let i = 0; i <= 6; i++) {
+    reposPaginated.add(reposPosts.slice(i, 6))
+
+    console.log(reposPaginated)
+  }
 
   return (
     <Pagination className="mt-8">
@@ -28,11 +32,9 @@ export function PaginationContainer() {
             onClick={() => handlePreviousPage}
           />
         </PaginationItem>
-        {Array.from({ length: countPages }, (_, i) => (
-          <PaginationItem key={i}>
-            <PaginationLink className="text-base-title">{i + 1}</PaginationLink>
-          </PaginationItem>
-        ))}
+        <PaginationItem>
+          <PaginationLink className="text-base-title"></PaginationLink>
+        </PaginationItem>
         <PaginationItem>
           <PaginationNext
             className="text-base-title"
