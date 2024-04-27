@@ -9,7 +9,7 @@ export function SearchRepos() {
 
   useEffect(() => {
     handleSearch(search)
-  }, [])
+  }, [search])
 
   return (
     <div>
@@ -20,7 +20,7 @@ export function SearchRepos() {
         placeholder="Buscar conteúdo"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="border-base-border bg-base-input placeholder:text-base-label w-full rounded-md border-[1px] px-4 py-3 text-base text-white"
+        className="w-full rounded-md border-[1px] border-base-border bg-base-input px-4 py-3 text-base text-white placeholder:text-base-label"
       />
     </div>
   )

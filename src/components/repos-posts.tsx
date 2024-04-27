@@ -11,15 +11,18 @@ import Markdown from 'react-markdown'
 export function ReposPosts() {
   const { reposPosts, search, indexThePage } = useContext(ReposPostsContext)
 
-  const pagination = CreatePagination(reposPosts)
+  const paginatedRepos = CreatePagination(reposPosts)
 
-  console.log(pagination)
+  const formattedReposPost = paginatedRepos[indexThePage].filter((repo) => {
+    if (!repo.name || !repo.description) {
+      return repo
+    }
 
-  const formattedReposPost = pagination[indexThePage].filter(
-    ({ name, description }) =>
-      name.toLowerCase().includes(search.toLowerCase()) ||
-      description.toLowerCase().includes(search.toLowerCase()),
-  )
+    return (
+      repo.name.toLowerCase().includes(search.toLowerCase()) ||
+      repo.description.toLowerCase().includes(search.toLowerCase())
+    )
+  })
 
   return (
     <ul className="grid grid-cols-2 gap-8">
