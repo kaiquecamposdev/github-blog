@@ -7,7 +7,7 @@ import { createContext, useEffect, useMemo, useState } from 'react'
 export const GITHUB_USERNAME = 'kaiquecamposdev'
 export const PER_PAGE = 6
 
-interface IRepoPost {
+export interface IRepoPost {
   id: number
   name: string
   description: string
@@ -23,10 +23,10 @@ interface IRepoPost {
 
 interface IReposPostsContextProps {
   reposPosts: IRepoPost[]
-  handleSearch: (query: string) => void
   search: string
-  handlePreviousPage: () => IRepoPost[]
-  handleNextPage: () => IRepoPost[]
+  indexThePage: number
+  setIndexThePage: (index: number) => void
+  handleSearch: (query: string) => void
 }
 
 interface IReposPostsContext {
@@ -37,12 +37,11 @@ export const ReposPostsContext = createContext({} as IReposPostsContextProps)
 
 export function ReposPostsProvider({ children }: IReposPostsContext) {
   const [search, setSearch] = useState('')
+  const [indexThePage, setIndexThePage] = useState(0)
   const [reposPosts, setReposPosts] = useState<IRepoPost[]>(
     updateInitialState('github-blog:posts'),
   )
-  function handleSearch(query: string) {
-    setSearch(query)
-  }
+
   const fetchReposPaginated = useMemo(
     () => async (): Promise<IRepoPost[]> => {
       const url = `https://api.github.com/users/${GITHUB_USERNAME}/repos`
@@ -56,11 +55,8 @@ export function ReposPostsProvider({ children }: IReposPostsContext) {
     },
     [GITHUB_USERNAME],
   )
-  function handlePreviousPage() {
-    return reposPosts.slice(reposPosts.length, PER_PAGE)
-  }
-  function handleNextPage() {
-    return reposPosts.slice(PER_PAGE, reposPosts.length)
+  function handleSearch(query: string) {
+    setSearch(query)
   }
 
   useEffect(() => {
@@ -77,10 +73,10 @@ export function ReposPostsProvider({ children }: IReposPostsContext) {
     <ReposPostsContext.Provider
       value={{
         reposPosts,
-        handleSearch,
         search,
-        handlePreviousPage,
-        handleNextPage,
+        indexThePage,
+        setIndexThePage,
+        handleSearch,
       }}
     >
       {children}

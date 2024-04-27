@@ -57,6 +57,7 @@ const PaginationLink = ({
         size,
       }),
       className,
+      isActive ? 'text-base-foreground' : 'text-base-text',
     )}
     {...props}
   />

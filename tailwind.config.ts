@@ -38,6 +38,7 @@ const config = {
         'base-border': 'var(--base-border)',
       },
       textColor: {
+        'text-base-foreground': 'var(--text-base-foreground)',
         'base-blue': 'var(--base-blue)',
         'base-title': 'var(--base-title)',
         'base-subtitle': 'var(--base-subtitle)',

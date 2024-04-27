@@ -9,19 +9,28 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
+import { CreatePagination } from '@/utils/create-pagination'
 import { useContext } from 'react'
 
 export function PaginationContainer() {
-  const { handlePreviousPage, handleNextPage, reposPosts } =
+  const { reposPosts, setIndexThePage, indexThePage } =
     useContext(ReposPostsContext)
 
-  const reposPaginated = new Set()
-
-  for (let i = 0; i <= 6; i++) {
-    reposPaginated.add(reposPosts.slice(i, 6))
-
-    console.log(reposPaginated)
+  function handleChangePage(index: number) {
+    setIndexThePage(index)
   }
+  function handlePreviousPage(index: number) {
+    if (index > 0) {
+      setIndexThePage(index - 1)
+    }
+  }
+  function handleNextPage(index: number, length: number) {
+    if (index >= 0 && index < length - 1) {
+      setIndexThePage(index + 1)
+    }
+  }
+
+  const pagination = CreatePagination(reposPosts)
 
   return (
     <Pagination className="mt-8">
@@ -29,16 +38,26 @@ export function PaginationContainer() {
         <PaginationItem>
           <PaginationPrevious
             className="text-base-title"
-            onClick={() => handlePreviousPage}
+            onClick={() => handlePreviousPage(indexThePage)}
           />
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink className="text-base-title"></PaginationLink>
-        </PaginationItem>
+        {pagination.map((_, index) => {
+          return (
+            <PaginationItem key={index}>
+              <PaginationLink
+                className="text-base-title"
+                onClick={() => handleChangePage(index)}
+                isActive={index === indexThePage}
+              >
+                {index + 1}
+              </PaginationLink>
+            </PaginationItem>
+          )
+        })}
         <PaginationItem>
           <PaginationNext
             className="text-base-title"
-            onClick={() => handleNextPage}
+            onClick={() => handleNextPage(indexThePage, pagination.length)}
           />
         </PaginationItem>
       </PaginationContent>
