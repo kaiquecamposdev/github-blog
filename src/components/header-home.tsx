@@ -59,8 +59,8 @@ export function Header() {
   }, [profile])
 
   return (
-    <header className="bg-base-profile mt-[-87px] flex gap-8 rounded-lg p-8 shadow-xl">
-      <section className="max-w-37 w-full rounded-lg">
+    <header className="mt-[-87px] flex gap-8 rounded-lg bg-base-profile p-8 shadow-xl">
+      <section className="w-full max-w-37 rounded-lg">
         {loading ? (
           <Skeleton
             borderRadius={8}
@@ -82,7 +82,7 @@ export function Header() {
       </section>
       <section className="flex w-full flex-col justify-center">
         <div className="flex justify-between">
-          <h1 className="text-base-title text-2xl font-bold">
+          <h1 className="text-2xl font-bold text-base-title">
             {loading ? (
               <Skeleton
                 width={200}
@@ -96,7 +96,8 @@ export function Header() {
           </h1>
           <Link
             href={profile?.html_url || '#'}
-            className="text-base-blue flex cursor-pointer items-center gap-2 text-xs font-bold uppercase"
+            target="_blank"
+            className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-base-blue"
           >
             {loading ? (
               <Skeleton
@@ -117,7 +118,7 @@ export function Header() {
             )}
           </Link>
         </div>
-        <p className="text-base-text pt-1 leading-[160%]">
+        <p className="pt-1 leading-[160%] text-base-text">
           {loading ? (
             <Skeleton
               width={500}
@@ -130,7 +131,7 @@ export function Header() {
           )}
         </p>
         <div className="flex flex-col pt-6">
-          <ul className="text-base-subtitle flex gap-6">
+          <ul className="flex gap-6 text-base-subtitle">
             <li className="flex items-center gap-2">
               <FontAwesomeIcon width={18} height={18} icon={faGithub} />
               {loading ? (

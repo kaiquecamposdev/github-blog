@@ -13,7 +13,7 @@ import { CreatePagination } from '@/utils/create-pagination'
 import { useContext } from 'react'
 
 export function PaginationContainer() {
-  const { reposPosts, setIndexThePage, indexThePage } =
+  const { reposPosts, setIndexThePage, indexThePage, search } =
     useContext(ReposPostsContext)
 
   function handleChangePage(index: number) {
@@ -30,7 +30,18 @@ export function PaginationContainer() {
     }
   }
 
-  const pagination = CreatePagination(reposPosts)
+  const formattedReposPost = reposPosts.filter((repo) => {
+    if (!repo.name || !repo.description) {
+      return false
+    }
+
+    return (
+      repo.name.toLowerCase().includes(search.toLowerCase()) ||
+      repo.description.toLowerCase().includes(search.toLowerCase())
+    )
+  })
+
+  const pagination = CreatePagination(formattedReposPost)
 
   return (
     <Pagination className="mt-8">
