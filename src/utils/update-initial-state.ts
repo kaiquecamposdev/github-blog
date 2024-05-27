@@ -4,7 +4,7 @@ export function updateInitialState(
 ) {
   const initialStateInJSON = localStorage?.getItem(path)
 
-  if (initialStateInJSON === null) {
+  if (!initialStateInJSON) {
     return emptyState
   }
 

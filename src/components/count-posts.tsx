@@ -6,9 +6,11 @@ import { useContext } from 'react'
 export function CountPosts() {
   const { reposPosts, search } = useContext(ReposPostsContext)
 
+  console.log(reposPosts)
+
   const formattedReposPost = reposPosts.filter((repo) => {
     if (!repo.name || !repo.description) {
-      return false
+      return repo
     }
 
     return (

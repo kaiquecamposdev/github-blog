@@ -39,7 +39,21 @@ export function ReposPostsProvider({ children }: IReposPostsContext) {
   const [search, setSearch] = useState('')
   const [indexThePage, setIndexThePage] = useState(0)
   const [reposPosts, setReposPosts] = useState<IRepoPost[]>(
-    updateInitialState('github-blog:posts'),
+    updateInitialState('github-blog:posts', [
+      {
+        id: 0,
+        name: '',
+        description: '',
+        html_url: '',
+        created_at: '',
+        owner: {
+          login: '',
+        },
+        stargazers_count: 0,
+        forks: 0,
+        watchers: 0,
+      },
+    ]),
   )
 
   const fetchReposPaginated = useMemo(
@@ -55,6 +69,7 @@ export function ReposPostsProvider({ children }: IReposPostsContext) {
     },
     [GITHUB_USERNAME],
   )
+
   function handleSearch(query: string) {
     setSearch(query)
   }
@@ -67,7 +82,7 @@ export function ReposPostsProvider({ children }: IReposPostsContext) {
         })
         .catch((err) => console.log(err))
     }
-  }, [reposPosts])
+  }, [])
 
   return (
     <ReposPostsContext.Provider

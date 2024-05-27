@@ -20,7 +20,7 @@ export function ContentPost() {
 
   return (
     <>
-      <Markdown className="text-base-text leading-[160%]">
+      <Markdown className="leading-[160%] text-base-text">
         {data?.description || 'Não há conteúdo'}
       </Markdown>
     </>
