@@ -33,4 +33,4 @@ Acesse o aplicativo em `http://localhost:3000`.
 Contribuições para o projeto são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
 
 ### Licença
-Este projeto é licenciado sob a licença MIT.
+Este projeto é licenciado sob a [MIT License](./LICENSE).
