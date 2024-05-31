@@ -10,11 +10,8 @@ export default function Home() {
       <div className="z-10 flex w-full max-w-main-content flex-col">
         <Header />
         <section className="flex flex-col gap-12 pt-14">
-          <div className="flex w-full flex-col gap-2">
+          <div className="flex w-full flex-col gap-3">
             <div className="flex w-full justify-between">
-              <strong className="text-lg font-bold text-subtitle">
-                Publicações
-              </strong>
               <CountPosts />
             </div>
             <div>

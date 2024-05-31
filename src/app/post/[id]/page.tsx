@@ -7,7 +7,7 @@ export default function Post() {
       <section className="z-10 flex w-full">
         <Header />
       </section>
-      <section className="px-10 py-8">
+      <section className="px-8 py-8">
         <ContentPost />
       </section>
     </div>

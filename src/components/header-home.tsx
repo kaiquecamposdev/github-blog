@@ -53,19 +53,18 @@ export function Header() {
           setLoading(false)
         })
         .catch((err) => {
-          setLoading(true)
           console.log(err)
         })
+    } else {
+      setLoading(false)
     }
-
-    setLoading(false)
   }, [profile])
 
   return (
     <header className="mt-[-87px] flex gap-8 rounded-lg bg-profile p-8 shadow-xl">
       <section className="w-full max-w-37 rounded-lg">
         {loading ? (
-          <Skeleton className="h-37 w-37 rounded-sm bg-muted" />
+          <Skeleton className="h-37 w-37 bg-muted" />
         ) : (
           <Image
             priority
@@ -77,41 +76,54 @@ export function Header() {
           />
         )}
       </section>
-      <section className="flex w-full flex-col justify-center gap-6">
-        <div className="flex justify-between">
+      <section className="flex w-full flex-1 flex-col justify-center gap-6">
+        <div className="flex flex-1 justify-between">
           <h1 className="text-base-title text-2xl font-bold">
             {loading ? <Skeleton className="h-4 w-48" /> : <>{profile?.name}</>}
           </h1>
-          <Link
-            href={profile?.html_url || '#'}
-            target="_blank"
-            className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-blue"
-          >
+          <div>
             {loading ? (
               <Skeleton className="h-4 w-14 bg-muted" />
             ) : (
-              <>
+              <Link
+                href={profile?.html_url || '#'}
+                target="_blank"
+                className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-blue"
+              >
                 Github
                 <FontAwesomeIcon
                   icon={faArrowUpRightFromSquare}
-                  width={12}
-                  height={12}
+                  width={16}
+                  height={16}
                 />
-              </>
+              </Link>
             )}
-          </Link>
+          </div>
         </div>
-        <p className="leading-[160%] text-primary">
+
+        <div className="flex flex-auto flex-col">
           {loading ? (
-            <Skeleton className="h-4 w-full bg-muted" />
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-4 w-full bg-muted" />
+              <Skeleton className="h-4 w-full bg-muted" />
+            </div>
           ) : (
-            <>{profile?.bio || 'Sem conteúdo'}</>
+            <p className="leading-[160%] text-primary">
+              {profile?.bio.length >= 250
+                ? profile?.bio.slice(0, 250) + '...'
+                : profile?.bio || 'Sem conteúdo'}
+            </p>
           )}
-        </p>
-        <nav className="flex flex-col">
+        </div>
+
+        <nav className="flex flex-1 flex-col">
           <ul className="flex gap-4 text-subtitle">
             <li className="flex items-center gap-2">
-              <FontAwesomeIcon className="h-4 w-4" icon={faGithub} />
+              {loading ? (
+                <Skeleton className="h-5 w-5 rounded-full bg-muted" />
+              ) : (
+                <FontAwesomeIcon className="h-4 w-4" icon={faGithub} />
+              )}
               {loading ? (
                 <Skeleton className="h-4 w-32 bg-muted" />
               ) : (
@@ -119,7 +131,11 @@ export function Header() {
               )}
             </li>
             <li className="flex items-center gap-2">
-              <FontAwesomeIcon className="h-4 w-4" icon={faBuilding} />
+              {loading ? (
+                <Skeleton className="h-5 w-5 rounded-full bg-muted" />
+              ) : (
+                <FontAwesomeIcon className="h-4 w-4" icon={faBuilding} />
+              )}
               {loading ? (
                 <Skeleton className="h-4 w-32 bg-muted" />
               ) : (
@@ -127,7 +143,11 @@ export function Header() {
               )}
             </li>
             <li className="flex items-center gap-2">
-              <FontAwesomeIcon className="h-4 w-4" icon={faUserGroup} />
+              {loading ? (
+                <Skeleton className="h-5 w-5 rounded-full bg-muted" />
+              ) : (
+                <FontAwesomeIcon className="h-4 w-4" icon={faUserGroup} />
+              )}
               {loading ? (
                 <Skeleton className="h-4 w-32 bg-muted" />
               ) : (

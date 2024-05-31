@@ -10,9 +10,11 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { CreatePagination } from '@/utils/create-pagination'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { Skeleton } from './ui/skeleton'
 
 export function PaginationContainer() {
+  const [loading, setLoading] = useState(true)
   const { reposPosts, setIndexThePage, indexThePage, search } =
     useContext(ReposPostsContext)
 
@@ -29,6 +31,12 @@ export function PaginationContainer() {
       setIndexThePage(index + 1)
     }
   }
+
+  useEffect(() => {
+    if (reposPosts) {
+      setLoading(false)
+    }
+  }, [])
 
   const formattedReposPost = reposPosts.filter((repo) => {
     if (!repo.name || !repo.description) {
@@ -49,24 +57,40 @@ export function PaginationContainer() {
     <Pagination className="mt-8">
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious
-            onClick={() => handlePreviousPage(indexThePage)}
-          />
+          {loading ? (
+            <Skeleton className="h-9 w-20 bg-muted" />
+          ) : (
+            <PaginationPrevious
+              onClick={() => handlePreviousPage(indexThePage)}
+            />
+          )}
         </PaginationItem>
-        {pagination.map((_, index) => (
-          <PaginationItem key={index}>
-            <PaginationLink
-              onClick={() => handleChangePage(index)}
-              isActive={index === indexThePage}
-            >
-              {index + 1}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
+        {loading ? (
+          <div className="flex gap-1">
+            <Skeleton className="h-9 w-9 bg-muted" />
+            <Skeleton className="h-9 w-9 bg-muted" />
+            <Skeleton className="h-9 w-9 bg-muted" />
+          </div>
+        ) : (
+          pagination.map((_, index) => (
+            <PaginationItem key={index}>
+              <PaginationLink
+                onClick={() => handleChangePage(index)}
+                isActive={index === indexThePage}
+              >
+                {index + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))
+        )}
         <PaginationItem>
-          <PaginationNext
-            onClick={() => handleNextPage(indexThePage, pagination.length)}
-          />
+          {loading ? (
+            <Skeleton className="h-9 w-20 bg-muted" />
+          ) : (
+            <PaginationNext
+              onClick={() => handleNextPage(indexThePage, pagination.length)}
+            />
+          )}
         </PaginationItem>
       </PaginationContent>
     </Pagination>
