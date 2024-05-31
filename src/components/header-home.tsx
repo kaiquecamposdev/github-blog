@@ -88,11 +88,12 @@ export function Header() {
               <Link
                 href={profile?.html_url || '#'}
                 target="_blank"
-                className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-blue"
+                className="flex items-center gap-2 text-xs font-bold uppercase text-blue hover:underline hover:underline-offset-[6px]"
               >
                 Github
                 <FontAwesomeIcon
                   icon={faArrowUpRightFromSquare}
+                  className="group-hover"
                   width={16}
                   height={16}
                 />

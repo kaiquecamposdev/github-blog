@@ -50,14 +50,17 @@ export function Header() {
             </>
           ) : (
             <>
-              <Link href="/" className="text-xs font-bold uppercase text-blue">
+              <Link
+                href="/"
+                className="text-xs font-bold uppercase text-blue hover:underline hover:underline-offset-[6px]"
+              >
                 <FontAwesomeIcon icon={faAngleLeft} className="h-3 w-3" />{' '}
                 Voltar
               </Link>
               <Link
                 href={formattedReposPosts?.html_url || '#'}
                 target="_blank"
-                className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-blue"
+                className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-blue hover:underline hover:underline-offset-[6px]"
               >
                 Ver no github
                 <FontAwesomeIcon
