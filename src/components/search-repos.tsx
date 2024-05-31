@@ -15,7 +15,7 @@ export function SearchRepos() {
     }
 
     handleSearch(search)
-  }, [])
+  }, [search])
 
   return loading ? (
     <Skeleton className="h-10 w-full bg-muted" />
