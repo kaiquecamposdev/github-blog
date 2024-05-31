@@ -1,6 +1,6 @@
 'use client'
 
-import { ReposPostsContext } from '@/app/context/repos-posts-provider'
+import { PER_PAGE, ReposPostsContext } from '@/app/context/repos-posts-provider'
 import {
   Pagination,
   PaginationContent,
@@ -32,7 +32,7 @@ export function PaginationContainer() {
 
   const formattedReposPost = reposPosts.filter((repo) => {
     if (!repo.name || !repo.description) {
-      return false
+      return []
     }
 
     return (
@@ -43,31 +43,28 @@ export function PaginationContainer() {
 
   const pagination = CreatePagination(formattedReposPost)
 
-  return (
+  return formattedReposPost.length <= PER_PAGE ? (
+    <></>
+  ) : (
     <Pagination className="mt-8">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            className="text-base-title"
             onClick={() => handlePreviousPage(indexThePage)}
           />
         </PaginationItem>
-        {pagination.map((_, index) => {
-          return (
-            <PaginationItem key={index}>
-              <PaginationLink
-                className="text-base-title"
-                onClick={() => handleChangePage(index)}
-                isActive={index === indexThePage}
-              >
-                {index + 1}
-              </PaginationLink>
-            </PaginationItem>
-          )
-        })}
+        {pagination.map((_, index) => (
+          <PaginationItem key={index}>
+            <PaginationLink
+              onClick={() => handleChangePage(index)}
+              isActive={index === indexThePage}
+            >
+              {index + 1}
+            </PaginationLink>
+          </PaginationItem>
+        ))}
         <PaginationItem>
           <PaginationNext
-            className="text-base-title"
             onClick={() => handleNextPage(indexThePage, pagination.length)}
           />
         </PaginationItem>

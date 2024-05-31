@@ -17,21 +17,24 @@ import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
-import Skeleton from 'react-loading-skeleton'
+import { Skeleton } from './ui/skeleton'
 
-interface IQueryParamsProps extends Params {
+interface IQueryParams extends Params {
   id: number
 }
 
 export function Header() {
   const [loading, setLoading] = useState<boolean>(true)
-  const params = useParams<IQueryParamsProps>()
   const { reposPosts } = useContext(ReposPostsContext)
+
+  const params = useParams<IQueryParams>()
 
   useEffect(() => {
     if (reposPosts) {
       setLoading(false)
     }
+
+    setLoading(true)
   }, [])
 
   const formattedReposPosts = reposPosts.find((item) => {
@@ -40,71 +43,48 @@ export function Header() {
 
   return (
     <>
-      <header className="mt-[-87px] flex w-full flex-col items-center rounded-lg bg-base-profile p-8 shadow-xl">
+      <header className="mt-[-87px] flex w-full flex-col items-center rounded-lg bg-profile p-8 shadow-xl">
         <div className="flex w-full justify-between">
-          <Link href="/" className="text-xs font-bold uppercase text-base-blue">
-            <FontAwesomeIcon icon={faAngleLeft} width={12} height={12} /> Voltar
+          <Link href="/" className="text-xs font-bold uppercase text-primary">
+            <FontAwesomeIcon icon={faAngleLeft} className="h-3 w-3" /> Voltar
           </Link>
           <Link
             href={formattedReposPosts?.html_url || '#'}
-            className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-base-blue"
+            className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-blue"
           >
             {loading ? (
-              <Skeleton
-                width={60}
-                height={16}
-                baseColor="var(--base-text)"
-                className="opacity-50"
-              />
+              <Skeleton className="h-4 w-14 bg-muted" />
             ) : (
               <>
                 Ver no github
                 <FontAwesomeIcon
+                  className="h-3 w-3"
                   icon={faArrowUpRightFromSquare}
-                  width={12}
-                  height={12}
                 />
               </>
             )}
           </Link>
         </div>
-        <h1 className="w-full pt-5 text-2xl font-bold leading-[160%] text-base-text">
+        <h1 className="w-full pt-5 text-2xl font-bold leading-[160%] text-primary">
           {formattedReposPosts?.name}
         </h1>
         <div className="flex w-full">
-          <ul className="flex gap-6 text-base-subtitle">
-            <li className="flex items-center gap-2 text-base-label">
-              <FontAwesomeIcon
-                width={18}
-                height={18}
-                className="text-base-label"
-                icon={faGithub}
-              />
+          <ul className="flex gap-6 text-subtitle">
+            <li className="flex items-center gap-2 text-label">
+              <FontAwesomeIcon className="h-4 w-4 text-label" icon={faGithub} />
               {loading ? (
-                <Skeleton
-                  width={120}
-                  height={16}
-                  baseColor="var(--base-text)"
-                  className="opacity-50"
-                />
+                <Skeleton className="h-4 w-28 bg-muted" />
               ) : (
                 <p>{formattedReposPosts?.owner.login}</p>
               )}
             </li>
-            <li className="flex items-center gap-2 text-base-label">
+            <li className="flex items-center gap-2 text-label">
               <FontAwesomeIcon
-                width={18}
-                height={18}
-                className="text-base-label"
+                className="h-4 w-4 text-primary"
                 icon={faCalendarDay}
               />
               {loading ? (
-                <Skeleton
-                  width={120}
-                  height={16}
-                  baseColor="var(--base-text)"
-                  className="opacity-50"
-                />
+                <Skeleton className="h-4 w-28 bg-muted" />
               ) : (
                 <time>
                   {formatDistance(
@@ -118,53 +98,26 @@ export function Header() {
                 </time>
               )}
             </li>
-            <li className="flex items-center gap-2 text-base-label">
-              <FontAwesomeIcon
-                width={18}
-                height={18}
-                className="text-base-label"
-                icon={faStar}
-              />
+            <li className="flex items-center gap-2 text-label">
+              <FontAwesomeIcon className="h-4 w-4 text-label" icon={faStar} />
               {loading ? (
-                <Skeleton
-                  width={120}
-                  baseColor="var(--base-text)"
-                  className="opacity-50"
-                />
+                <Skeleton className="w-28" />
               ) : (
                 <p>{formattedReposPosts?.stargazers_count + ' '} estrelas</p>
               )}
             </li>
-            <li className="flex items-center gap-2 text-base-label">
-              <FontAwesomeIcon
-                width={18}
-                height={18}
-                className="text-base-label"
-                icon={faCodeFork}
-              />
+            <li className="flex items-center gap-2 text-label">
+              <FontAwesomeIcon className="h-4 w-4" icon={faCodeFork} />
               {loading ? (
-                <Skeleton
-                  width={120}
-                  baseColor="var(--base-text)"
-                  className="opacity-50"
-                />
+                <Skeleton className="w-28" />
               ) : (
                 <p>{formattedReposPosts?.forks + ' '} forks</p>
               )}
             </li>
-            <li className="flex items-center gap-2 text-base-label">
-              <FontAwesomeIcon
-                width={18}
-                height={18}
-                className="text-base-label"
-                icon={faEye}
-              />
+            <li className="flex items-center gap-2 text-label">
+              <FontAwesomeIcon className="h-4 w-4" icon={faEye} />
               {loading ? (
-                <Skeleton
-                  width={120}
-                  baseColor="var(--base-text)"
-                  className="opacity-50"
-                />
+                <Skeleton className="w-28" />
               ) : (
                 <p>{formattedReposPosts?.watchers + ' '} visto</p>
               )}

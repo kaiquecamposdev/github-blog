@@ -24,7 +24,7 @@ export default function RootLayout({
       <body>
         <ReposPostsProvider>
           <main className="flex flex-col items-center justify-center pb-4">
-            <header className="flex min-h-[296px] w-full before:w-full before:bg-logo before:bg-cover before:bg-center before:bg-no-repeat" />
+            <header className="flex min-h-72 w-full before:w-full before:bg-logo before:bg-cover before:bg-center before:bg-no-repeat" />
             {children}
           </main>
         </ReposPostsProvider>

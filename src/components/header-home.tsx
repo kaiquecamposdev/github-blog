@@ -13,8 +13,7 @@ import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import { Skeleton } from './ui/skeleton'
 
 interface IProfile {
   avatar_url: string
@@ -53,59 +52,43 @@ export function Header() {
           setProfile(data)
           setLoading(false)
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+          setLoading(true)
+          console.log(err)
+        })
     }
+
     setLoading(false)
   }, [profile])
 
   return (
-    <header className="mt-[-87px] flex gap-8 rounded-lg bg-base-profile p-8 shadow-xl">
+    <header className="mt-[-87px] flex gap-8 rounded-lg bg-profile p-8 shadow-xl">
       <section className="w-full max-w-37 rounded-lg">
         {loading ? (
-          <Skeleton
-            borderRadius={8}
-            width={148}
-            height={148}
-            baseColor="var(--base-text)"
-            className="opacity-50"
-          />
+          <Skeleton className="h-37 w-37 rounded-sm bg-muted" />
         ) : (
           <Image
             priority
-            src={profile?.avatar_url || ''}
             width={148}
             height={148}
+            src={profile?.avatar_url || ''}
+            className="h-37 w-37 rounded-lg"
             alt=""
-            className="rounded-lg"
           />
         )}
       </section>
-      <section className="flex w-full flex-col justify-center">
+      <section className="flex w-full flex-col justify-center gap-6">
         <div className="flex justify-between">
-          <h1 className="text-2xl font-bold text-base-title">
-            {loading ? (
-              <Skeleton
-                width={200}
-                height={24}
-                baseColor="var(--base-text)"
-                className="opacity-50"
-              />
-            ) : (
-              <>{profile?.name}</>
-            )}
+          <h1 className="text-base-title text-2xl font-bold">
+            {loading ? <Skeleton className="h-4 w-48" /> : <>{profile?.name}</>}
           </h1>
           <Link
             href={profile?.html_url || '#'}
             target="_blank"
-            className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-base-blue"
+            className="flex cursor-pointer items-center gap-2 text-xs font-bold uppercase text-blue"
           >
             {loading ? (
-              <Skeleton
-                width={60}
-                height={16}
-                baseColor="var(--base-text)"
-                className="opacity-50"
-              />
+              <Skeleton className="h-4 w-14 bg-muted" />
             ) : (
               <>
                 Github
@@ -118,60 +101,41 @@ export function Header() {
             )}
           </Link>
         </div>
-        <p className="pt-1 leading-[160%] text-base-text">
+        <p className="leading-[160%] text-primary">
           {loading ? (
-            <Skeleton
-              width={500}
-              height={16}
-              baseColor="var(--base-text)"
-              className="opacity-50"
-            />
+            <Skeleton className="h-4 w-full bg-muted" />
           ) : (
             <>{profile?.bio || 'Sem conteúdo'}</>
           )}
         </p>
-        <div className="flex flex-col pt-6">
-          <ul className="flex gap-6 text-base-subtitle">
+        <nav className="flex flex-col">
+          <ul className="flex gap-4 text-subtitle">
             <li className="flex items-center gap-2">
-              <FontAwesomeIcon width={18} height={18} icon={faGithub} />
+              <FontAwesomeIcon className="h-4 w-4" icon={faGithub} />
               {loading ? (
-                <Skeleton
-                  width={130}
-                  height={16}
-                  baseColor="var(--base-text)"
-                  className="opacity-50"
-                />
+                <Skeleton className="h-4 w-32 bg-muted" />
               ) : (
                 <p>{profile?.login || 'Sem conteúdo'}</p>
               )}
             </li>
             <li className="flex items-center gap-2">
-              <FontAwesomeIcon width={18} height={18} icon={faBuilding} />
+              <FontAwesomeIcon className="h-4 w-4" icon={faBuilding} />
               {loading ? (
-                <Skeleton
-                  width={130}
-                  height={16}
-                  baseColor="var(--base-text)"
-                  className="opacity-50"
-                />
+                <Skeleton className="h-4 w-32 bg-muted" />
               ) : (
                 <p>{profile?.company || 'Sem conteúdo'}</p>
               )}
             </li>
             <li className="flex items-center gap-2">
-              <FontAwesomeIcon width={18} height={18} icon={faUserGroup} />
+              <FontAwesomeIcon className="h-4 w-4" icon={faUserGroup} />
               {loading ? (
-                <Skeleton
-                  width={130}
-                  baseColor="var(--base-text)"
-                  className="opacity-50"
-                />
+                <Skeleton className="h-4 w-32 bg-muted" />
               ) : (
                 <p>{profile?.followers + ' ' || 0 + ' '} Seguidores</p>
               )}
             </li>
           </ul>
-        </div>
+        </nav>
       </section>
     </header>
   )

@@ -10,13 +10,6 @@ const config = {
   ],
   prefix: '',
   theme: {
-    container: {
-      center: true,
-      padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
-    },
     extend: {
       width: {
         37: '148px',
@@ -31,60 +24,37 @@ const config = {
       maxHeight: {
         37: '148px',
       },
+      gridTemplateColumns: {
+        posts: 'repeat(2, minmax(26rem, 1fr))',
+      },
       backgroundImage: {
         logo: 'url("/logo.webp")',
       },
-      borderColor: {
-        'base-border': 'var(--base-border)',
-      },
-      textColor: {
-        'text-base-foreground': 'var(--text-base-foreground)',
-        'base-blue': 'var(--base-blue)',
-        'base-title': 'var(--base-title)',
-        'base-subtitle': 'var(--base-subtitle)',
-        'base-text': 'var(--base-text)',
-        'base-span': 'var(--base-span)',
-        'base-label': 'var(--base-label)',
-      },
-      backgroundColor: {
-        base: 'var(--base)',
-        'base-profile': 'var(--base-profile)',
-        'base-input': 'var(--base-input)',
-        'base-post': 'var(--base-post)',
-      },
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        title: 'var(--title)',
+        subtitle: 'var(--subtitle)',
+        label: 'var(--label)',
+
+        profile: 'var(--profile)',
+        blue: 'var(--blue)',
+
+        border: {
+          DEFAULT: 'var(--border)',
+        },
+        input: {
+          DEFAULT: 'var(--input)',
+        },
+        background: {
+          DEFAULT: 'var(--background)',
+        },
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
+          DEFAULT: 'var(--primary)',
         },
         muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
+          DEFAULT: 'var(--muted)',
         },
         card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
+          DEFAULT: 'var(--card)',
         },
       },
       borderRadius: {
