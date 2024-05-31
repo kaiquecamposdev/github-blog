@@ -6,6 +6,7 @@ import {
   faAngleLeft,
   faArrowUpRightFromSquare,
   faCalendarDay,
+  faCode,
   faCodeFork,
   faEye,
   faStar,
@@ -94,25 +95,16 @@ export function Header() {
                 <>{formattedReposPosts?.owner.login}</>
               )}
             </li>
-            <li className="flex items-center gap-2">
+            <li className="flex items-center gap-2 text-muted">
               {loading ? (
                 <Skeleton className="h-5 w-5 rounded-full bg-muted" />
               ) : (
-                <FontAwesomeIcon className="h-4 w-4" icon={faCalendarDay} />
+                <FontAwesomeIcon className="h-4 w-4" icon={faCode} />
               )}
               {loading ? (
                 <Skeleton className="h-4 w-28 bg-muted" />
               ) : (
-                <time className="text-muted">
-                  {formatDistance(
-                    formattedReposPosts?.created_at || new Date(),
-                    new Date(),
-                    {
-                      addSuffix: true,
-                      locale: ptBR,
-                    },
-                  )}
-                </time>
+                <>{formattedReposPosts?.language}</>
               )}
             </li>
             <li className="flex items-center gap-2 text-muted">
@@ -152,6 +144,27 @@ export function Header() {
                 <Skeleton className="h-4 w-28 bg-muted" />
               ) : (
                 <>{formattedReposPosts?.watchers + ' '} vistos</>
+              )}
+            </li>
+            <li className="flex items-center gap-2">
+              {loading ? (
+                <Skeleton className="h-5 w-5 rounded-full bg-muted" />
+              ) : (
+                <FontAwesomeIcon className="h-4 w-4" icon={faCalendarDay} />
+              )}
+              {loading ? (
+                <Skeleton className="h-4 w-28 bg-muted" />
+              ) : (
+                <time className="text-muted">
+                  {formatDistance(
+                    formattedReposPosts?.created_at || new Date(),
+                    new Date(),
+                    {
+                      addSuffix: true,
+                      locale: ptBR,
+                    },
+                  )}
+                </time>
               )}
             </li>
           </ul>

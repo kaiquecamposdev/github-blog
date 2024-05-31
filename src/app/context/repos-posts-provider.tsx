@@ -19,6 +19,7 @@ export interface IRepoPost {
   stargazers_count: number
   forks: number
   watchers: number
+  language: string
 }
 
 interface IReposPostsContextProps {
