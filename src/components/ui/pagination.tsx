@@ -56,6 +56,7 @@ const PaginationLink = ({
         size,
       }),
       className,
+      isActive ? 'bg-card' : 'bg-profile',
     )}
     {...props}
   />
